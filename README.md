@@ -25,7 +25,7 @@ node,three,canvas 图片文字识别
      var APP_ID = "＊＊＊＊＊＊＊";
      var API_KEY = "＊＊＊＊＊＊";
      var SECRET_KEY = "＊＊＊＊＊＊＊＊";
-  2、 npm install
+  2、npm install
   3、node start
 </pre>
 
