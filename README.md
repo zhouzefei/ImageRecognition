@@ -17,6 +17,17 @@ node,three,canvas 图片文字识别
 
 <br />
 
+<pre>
+  + 当然先去百度ocr申请应用http://ai.baidu.com/tech/ocr/general
+  ```
+     var APP_ID = "＊＊＊＊＊＊＊";
+     var API_KEY = "＊＊＊＊＊＊";
+     var SECRET_KEY = "＊＊＊＊＊＊＊＊";
+  ```
+  + npm install
+  + node start
+</pre>
+
 附上我的demo，，代码比较简陋勿喷，纯属玩乐
 
 ![](https://github.com/zhouzefei/ImageRecognition/blob/master/demo.gif)
