@@ -9,7 +9,6 @@ node,three,canvas 图片文字识别
 <pre>
   使用百度 ocr 的node-sdk,来对图片中的文字进行识别， 当然如果图片倾斜这些如何处理？
   图片是二维，我如何对图片本身进行旋转？而且是3维的旋转！图片->three转canvas(旋转操作)->图片。。。
-  为什么要用three，因为现在我们canvas，从代码中就可以发现```getContext('2d')```,二维!
 </pre>
 
 <br />
