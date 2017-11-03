@@ -34,9 +34,9 @@ var AipOcr = require('./src/index').ocr;
 var fs = require('fs');
 var http = require('http');
 //设置APPID/AK/SK（前往百度云控制台创建应用后获取相关数据）
-var APP_ID = "10313255";
-var API_KEY = "Q1NaRwWYW9UeAf2oSwlsMedW";
-var SECRET_KEY = "1mU2KlwfR6LbBpT6lLvOZGcq6RTq3xsf";
+var APP_ID = "＊＊＊＊＊＊＊";
+var API_KEY = "＊＊＊＊＊＊";
+var SECRET_KEY = "＊＊＊＊＊＊＊＊";
 var client = new AipOcr(APP_ID, API_KEY, SECRET_KEY);
 var img = fs.readFileSync('assets/2333.png');
 app.post('/imgInfo',upload.single("file"),function(req,res){
