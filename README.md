@@ -6,8 +6,11 @@ node,three,canvas 图片文字识别
 > 此次项目做的比较粗燥，纯属兴趣尝试，主要的思想：
 
 
-<pre>使用百度 ocr 的node-sdk,来对图片中的文字进行识别， 当然如果图片倾斜这些如何处理？图片是二维，我如何对图片本身进行旋转？而且是3维的旋转！
-图片-three转canvas(旋转操作)-图片。。。为什么要用three，因为现在我们canvas，从代码中就可以发现```getContext('2d')```,二维!</pre>
+<pre>
+  使用百度 ocr 的node-sdk,来对图片中的文字进行识别， 当然如果图片倾斜这些如何处理？
+  图片是二维，我如何对图片本身进行旋转？而且是3维的旋转！图片-three转canvas(旋转操作)-图片。。。
+  为什么要用three，因为现在我们canvas，从代码中就可以发现```getContext('2d')```,二维!
+</pre>
 
 <br />
 
@@ -18,8 +21,7 @@ node,three,canvas 图片文字识别
 <br />
 
 <pre>
-  1、当然先去百度ocr申请应用http://ai.baidu.com/tech/ocr/general  然后
-    设置这三个值
+  1、当然先去百度ocr申请应用http://ai.baidu.com/tech/ocr/general  然后设置这三个值
      var APP_ID = "＊＊＊＊＊＊＊";
      var API_KEY = "＊＊＊＊＊＊";
      var SECRET_KEY = "＊＊＊＊＊＊＊＊";
