@@ -21,7 +21,7 @@ node,three,canvas 图片文字识别
 <br />
 
 <pre>
-开始步骤：
+  开始步骤：
   1、当然先去百度ocr申请应用http://ai.baidu.com/tech/ocr/general  然后设置这三个值
      var APP_ID = "＊＊＊＊＊＊＊";
      var API_KEY = "＊＊＊＊＊＊";
