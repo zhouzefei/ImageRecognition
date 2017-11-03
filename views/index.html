@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./jquery/dist/jquery.min.js"></script>
+    <script src="./html2canvas/dist/html2canvas.min.js"></script>
+    <script src="./three/build/three.min.js"></script>
+    <style>
+        li{
+            font-size:14px;
+        }
+    </style>
+</head>
+<body>
+    <input type='file' name='FileUpload' id='FileUpload'/>
+    <button type='button' id='upload'>上传图片</button>
+    <button type='button' id="push">生成图片</button>
+    <button type='button' id="top">上抬</button>
+    <button type='button' id="left">左转</button>
+    <button type='button' id="right">右转</button>
+    <button type='button' id="bottom">下调</button>
+    <button type='button' id="zUp">z+</button>
+    <button type='button' id="zDown">z-</button>
+    <ul id='content'>
+    </ul>
+    <script>
+        var imgWidth = '', imgHeight = '';
+        var scene = new THREE.Scene();//场景
+        var camera = new THREE.PerspectiveCamera(83,window.innerWidth/window.innerHeight,0.1,100);//相机
+        var render = null;
+
+        var cube = '';
+        var geometry = new THREE.BoxGeometry( 1.68,1,0 );
+        var loader = new THREE.TextureLoader();
+
+        //有图片上传时render
+        function changePicRender(currentImg){
+            loader.load(
+                currentImg,
+                function(texture){
+                    var material = new THREE.MeshBasicMaterial( {
+                        map: texture
+                    });
+                    cube = new THREE.Mesh( geometry, material ); 
+                    scene.add(cube);
+                    camera.position.z = 1;
+                    renderer.render(scene,camera);
+                },
+                function(xhr){
+                    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+                },
+                function(xhr){
+                    console.error( 'An error happened' );
+                }
+            );
+        }
+        function renderLeft(scene,camera){
+            cube.rotation.y+=0.03;
+            renderer.render(scene,camera);
+        };
+        function renderRight(scene,camera){
+            cube.rotation.y-=0.03;
+            renderer.render(scene,camera);
+        };
+        function renderTop(scene,camera){
+            cube.rotation.x+=0.03;
+            renderer.render(scene,camera);
+        };
+        function renderBottom(scene,camera){
+            cube.rotation.x-=0.03;
+            renderer.render(scene,camera);
+        };
+        function zTop(scene,camera){
+            cube.rotation.z+=0.03;
+            renderer.render(scene,camera);
+        };
+        function zBottom(scene,camera){
+            cube.rotation.z-=0.03;
+            renderer.render(scene,camera);
+        };
+
+        $(function(){
+            $("#left").on('click',function(){
+                renderLeft(scene,camera);
+            });
+            $('#right').on('click',function(){
+                renderRight(scene,camera);
+            })
+            $('#top').on('click',function(){
+                renderTop(scene,camera);
+            })
+            $('#bottom').on('click',function(){
+                renderBottom(scene,camera);
+            });
+            $('#zUp').on('click',function(){
+                zTop(scene,camera);
+            });
+            $('#zDown').on('click',function(){
+                zBottom(scene,camera);
+            });
+            //change3d图片后存图
+            function dataURItoBlob(dataURI) {
+                var byteString = atob(dataURI.split(',')[1]);
+                var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+                var ab = new ArrayBuffer(byteString.length);
+                var ia = new Uint8Array(ab);
+                for (var i = 0; i < byteString.length; i++) {
+                    ia[i] = byteString.charCodeAt(i);
+                }
+                return new Blob([ab], {type: mimeString});
+            }
+            $('#push').on('click',function(){
+                var image = new Image();
+                image.src = document.getElementById('mainCanvas').toDataURL("image/png");
+                var base64Data = document.getElementById('mainCanvas').toDataURL("image/png");
+                var blob = dataURItoBlob(base64Data);  
+                var fd = new FormData();  
+                fd.append("file", blob);//fileData为自定义  
+                fd.append("action", "UploadVMKImagePath");  
+                $.ajax({
+                    type: 'POST',
+                    url: './imgInfo',
+                    data: fd,
+                    contentType:false,
+                    processData: false,
+                    dataType: "json",
+                    success: function(data){
+                        if(data && data.words_result){
+                            var result = data.words_result;
+                            var str = '';
+                            for(var i in result){
+                                str+='<li>'+result[i].words+'</li>';
+                            }
+                            $("#content").html(str);
+                        }
+                    },
+                });
+            });
+            //监听变更预览
+            $('#FileUpload').on('change',function(){
+                var f = document.getElementById("FileUpload").files[0];
+                var reader = new FileReader();  
+                reader.onload = function (e) {  
+                    var data = e.target.result;  
+                    //加载图片获取图片真实宽度和高度  
+                    var image = new Image();  
+                    image.onload=function(){  
+                        imgWidth = image.width;  
+                        imgHeight = image.height; 
+                        $("#mainCanvas").remove();
+                        $("body").append('<canvas id="mainCanvas"></canvas>')
+                        renderer = new THREE.WebGLRenderer({antialias:true,premultipliedAlpha:false,preserveDrawingBuffer: true, canvas: document.getElementById('mainCanvas')});
+                        renderer.setSize(imgWidth, imgHeight);
+                        document.body.appendChild(renderer.domElement); 
+                    };  
+                    image.src= data;  
+                }; 
+                reader.readAsDataURL(f);   
+            });
+            $('#upload').on('click',function(){
+                var fileObj = document.getElementById("FileUpload").files[0];
+                if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
+                   alert("请选择图片");
+                   return;
+                }
+                //预览
+                var reader = new FileReader();
+                reader.readAsDataURL(fileObj);
+                reader.onload = function(e) {
+                    changePicRender(this.result);
+                };
+                //提交
+                var formFile = new FormData();
+                formFile.append("action", "UploadVMKImagePath");  
+                formFile.append("file", fileObj); //加入文件对象
+                var data = formFile;
+                $.ajax({
+                    type: 'POST',
+                    url: './imgInfo',
+                    data: data,
+                    contentType:false,
+                    processData: false,
+                    dataType: "json",
+                    success: function(data){
+                        if(data && data.words_result){
+                            var result = data.words_result;
+                            var str = '';
+                            for(var i in result){
+                                str+='<li>'+result[i].words+'</li>';
+                            }
+                            $("#content").html(str);
+                        }
+                    },
+                });
+            });
+        })
+    </script>
+</body>
+</html>
