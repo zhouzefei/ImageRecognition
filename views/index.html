@@ -58,27 +58,27 @@
             );
         }
         function renderLeft(scene,camera){
-            cube.rotation.y+=0.03;
+            cube.rotation.y+=0.01;
             renderer.render(scene,camera);
         };
         function renderRight(scene,camera){
-            cube.rotation.y-=0.03;
+            cube.rotation.y-=0.01;
             renderer.render(scene,camera);
         };
         function renderTop(scene,camera){
-            cube.rotation.x+=0.03;
+            cube.rotation.x+=0.01;
             renderer.render(scene,camera);
         };
         function renderBottom(scene,camera){
-            cube.rotation.x-=0.03;
+            cube.rotation.x-=0.01;
             renderer.render(scene,camera);
         };
         function zTop(scene,camera){
-            cube.rotation.z+=0.03;
+            cube.rotation.z+=0.01;
             renderer.render(scene,camera);
         };
         function zBottom(scene,camera){
-            cube.rotation.z-=0.03;
+            cube.rotation.z-=0.01;
             renderer.render(scene,camera);
         };
 
